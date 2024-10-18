@@ -32,7 +32,7 @@ public class BuscadorCaminos {
         return false;
     }
     public LinkedList<Integer> obtenterCaminoMasLargo(Integer origen, Integer destino){
-        LinkedList<Integer> resultado = new LinkedList<Integer>();
+
         this.visitados.clear();//limpio el hash por si lo use co otro metodo
         return caminoMasLargo(origen, destino, new LinkedList<>(), new LinkedList<>());
     }
@@ -44,7 +44,7 @@ public class BuscadorCaminos {
         if(origen.equals(destino)){
 
             if(actual.size()>mejor.size()){//si llego al destino y el arreglo actual es mas largo que el mejor
-                mejor = new LinkedList<Integer>(actual);//el actual se vuelve el mejor
+                mejor = new LinkedList<Integer>(actual);//el actual se vuelve una copia del mejor
             }
         }else{//si el actual no es el destino
                 Iterator<Integer> adyasentes = this.grafo.obtenerAdyacentes(origen);
@@ -58,5 +58,13 @@ public class BuscadorCaminos {
         actual.removeLast();
         this.visitados.remove(origen);//si no llego al destino por este camino, deshago el avance actual
         return mejor;
+    }
+    public LinkedList<LinkedList<Integer>> todosLosCaminosHacia(Integer destino){
+        this.visitados.clear();//limpio el hash por si lo use co otro metodo
+        return this.encontrarTodosLosCaminosHacia( destino, new LinkedList<>(), new LinkedList<>());
+    }
+
+    private LinkedList<LinkedList<Integer>> encontrarTodosLosCaminosHacia(Integer destino ,LinkedList<Integer> resultado ,LinkedList<Integer>actual ){
+
     }
 }

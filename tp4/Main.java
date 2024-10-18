@@ -54,7 +54,7 @@ public class Main {
 			System.out.println(caminoActual);
 		}
 		*/
-	Iterator<Integer> camino = gps.obtenterCaminoMasLargo(1,5).iterator();
+	Iterator<Integer> camino = gps.obtenterCaminoMasLargo(7,3).iterator();
 	while (camino.hasNext()) {
 		System.out.println(camino.next());
 	}
