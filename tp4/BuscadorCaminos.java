@@ -2,6 +2,7 @@ package ProgramacionIII.tp4;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 public class BuscadorCaminos {
     private Grafo<?> grafo;
@@ -15,7 +16,7 @@ public class BuscadorCaminos {
         if(origen.equals(destino) ){//si el origen es el destino, llegue
             return true;
         }
-        Iterator<Integer> adyacentes = this.grafo.obtenerAdyacentes(origen);//obtengo los adyasentes al destino
+        Iterator<Integer> adyacentes = this.grafo.obtenerAdyacentes(origen);//obtengo los adyasentes al origen
         while(adyacentes.hasNext()){//recorro los adyasentes
             Integer siguiente = adyacentes.next();
             if(!this.visitados.contains(siguiente)){//si el adyasente siguiente no esta entre los visitados
@@ -29,5 +30,33 @@ public class BuscadorCaminos {
 
         //si recorri todo el grafo y no encontre un camino, retorno false.
         return false;
+    }
+    public LinkedList<Integer> obtenterCaminoMasLargo(Integer origen, Integer destino){
+        LinkedList<Integer> resultado = new LinkedList<Integer>();
+        this.visitados.clear();//limpio el hash por si lo use co otro metodo
+        return caminoMasLargo(origen, destino, new LinkedList<>(), new LinkedList<>());
+    }
+
+    private LinkedList<Integer> caminoMasLargo(Integer origen , Integer destino,
+                                               LinkedList<Integer> actual,LinkedList<Integer> mejor){
+        this.visitados.add(origen);
+        actual.add(origen); //agrego el vertice visitado al arreglo "actual"
+        if(origen.equals(destino)){
+
+            if(actual.size()>mejor.size()){//si llego al destino y el arreglo actual es mas largo que el mejor
+                mejor = new LinkedList<Integer>(actual);//el actual se vuelve el mejor
+            }
+        }else{//si el actual no es el destino
+                Iterator<Integer> adyasentes = this.grafo.obtenerAdyacentes(origen);
+                while(adyasentes.hasNext()){//itero los adyasentes
+                    Integer siguiente = adyasentes.next();
+                    if(!this.visitados.contains(siguiente)){
+                        mejor = caminoMasLargo(siguiente,destino,actual,mejor);//llamo recursivamente con el siguiente
+                    }
+                }
+        }
+        actual.removeLast();
+        this.visitados.remove(origen);//si no llego al destino por este camino, deshago el avance actual
+        return mejor;
     }
 }

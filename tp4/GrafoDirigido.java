@@ -64,7 +64,7 @@ public void agregarVertice(int verticeId) {
 
 	@Override
 	public boolean contieneVertice(int verticeId) {
-		return this.vertices.contains(verticeId);
+		return this.vertices.containsKey(verticeId);
 	}
 
 	@Override

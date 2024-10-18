@@ -59,22 +59,25 @@ public class ServicioDfs {
 
     private boolean dfsBucle(Integer origen){
 
-        this.vertices.put(origen,"amarillo");
+        this.vertices.put(origen,"amarillo");//pinta el vertice de amarillo
         boolean  resultado = false;
-        Iterator<Integer> it = this.grafo.obtenerAdyacentes(origen);
+        Iterator<Integer> it = this.grafo.obtenerAdyacentes(origen);//obtengo los adyasentes
         while (it.hasNext()){
             Integer siguiente = it.next();
             if(this.vertices.get(siguiente).equals("blanco")){
-                  resultado = this.dfsBucle(siguiente);
+                  resultado = this.dfsBucle(siguiente);//si el vertice es blanco, llamo recursivamente
                 if(resultado){
-                    return resultado;}
+                    return resultado;//en este punto solo propago la respuesta en caso de ser verdadera
+                }
             }
             if(this.vertices.get(siguiente).equals("amarillo")){
-                return true;
+                return true;//si encuentro un vertice amarillo retorno true
             }
 
         }
-        this.vertices.put(origen, "negro");
+        this.vertices.put(origen, "negro");//si no tiene mas adyasentes, lo pinto de negro
         return resultado;
     }
+
+
 }

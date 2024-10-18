@@ -28,7 +28,7 @@ public class Main {
 		grafito.agregarArco(1, 4, 3F);
 		grafito.agregarArco(7, 4, 12F);
 		grafito.agregarArco(2, 5, 5F);
-		grafito.agregarArco(3, 1, 6F);
+		//grafito.agregarArco(3, 1, 6F);
 		grafito.agregarArco(4, 5, 8F);
 		grafito.agregarArco(8, 5, 15F);
 		grafito.agregarArco(4, 6, 7F);
@@ -39,7 +39,7 @@ public class Main {
 
 
 		// Obtengo el arco entre 1 y 2, y le pido la etiqueta
-		Float etiqueta = grafito.obtenerArco(6, 5).getEtiqueta();
+		//Float etiqueta = grafito.obtenerArco(6, 5).getEtiqueta();
 		
 		Iterator<Integer> verticesAd = grafito.obtenerAdyacentes(7);
 	/*
@@ -54,8 +54,11 @@ public class Main {
 			System.out.println(caminoActual);
 		}
 		*/
+	Iterator<Integer> camino = gps.obtenterCaminoMasLargo(1,5).iterator();
+	while (camino.hasNext()) {
+		System.out.println(camino.next());
+	}
 
-		System.out.println(dfs.tieneBucle());
 	}
 
 }
