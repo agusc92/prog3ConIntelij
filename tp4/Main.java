@@ -54,11 +54,18 @@ public class Main {
 			System.out.println(caminoActual);
 		}
 		*/
-	Iterator<Integer> camino = gps.obtenterCaminoMasLargo(7,3).iterator();
-	while (camino.hasNext()) {
-		System.out.println(camino.next());
-	}
+//	Iterator<Integer> camino = gps.obtenterCaminoMasLargo(7,3).iterator();
+//	while (camino.hasNext()) {
+//		System.out.println(camino.next());
+//	}
+//		LinkedList<Integer> result = gps.obtenterCaminoMasLargo(1,5);
+//		Iterator<Integer> lista = result.iterator();
+//		while (lista.hasNext()) {
+//			System.out.println(lista.next());
+//		}
 
+		LinkedList<LinkedList<Integer>> todos = gps.todosLosCaminosHacia(6);
+		System.out.println(todos.size());
 	}
 
 }

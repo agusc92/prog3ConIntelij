@@ -7,6 +7,7 @@ import java.util.LinkedList;
 public class BuscadorCaminos {
     private Grafo<?> grafo;
     private HashSet<Integer> visitados; //guardo los vertices que ya visite
+    private LinkedList<LinkedList<Integer>> todosLosCaminos = new LinkedList<>();
     public BuscadorCaminos(Grafo<?> grafo){
         this.grafo = grafo;
         this.visitados = new HashSet<>();
@@ -61,10 +62,33 @@ public class BuscadorCaminos {
     }
     public LinkedList<LinkedList<Integer>> todosLosCaminosHacia(Integer destino){
         this.visitados.clear();//limpio el hash por si lo use co otro metodo
-        return this.encontrarTodosLosCaminosHacia( destino, new LinkedList<>(), new LinkedList<>());
+        this.todosLosCaminos.clear();
+        Iterator<Integer> vertices = this.grafo.obtenerVertices();
+        while (vertices.hasNext()){
+
+            encontrarTodosLosCaminosHacia(vertices.next(),destino, new LinkedList<>());
+        }
+        return  this.todosLosCaminos;
     }
 
-    private LinkedList<LinkedList<Integer>> encontrarTodosLosCaminosHacia(Integer destino ,LinkedList<Integer> resultado ,LinkedList<Integer>actual ){
+    private void encontrarTodosLosCaminosHacia(Integer origen,Integer destino ,LinkedList<Integer>actual ){
+        this.visitados.add(origen);
+        actual.add(origen); //agrego el vertice visitado al arreglo "actual"
+        if(origen.equals(destino)){
+            this.todosLosCaminos.add(new LinkedList<Integer>(actual));
+
+        }else{//si el actual no es el destino
+            Iterator<Integer> adyasentes = this.grafo.obtenerAdyacentes(origen);
+            while(adyasentes.hasNext()){//itero los adyasentes
+                Integer siguiente = adyasentes.next();
+                if(!this.visitados.contains(siguiente)){
+                   encontrarTodosLosCaminosHacia(siguiente,destino,actual);//llamo recursivamente con el siguiente
+                }
+            }
+        }
+        actual.removeLast();
+        this.visitados.remove(origen);//si no llego al destino por este camino, deshago el avance actual
 
     }
+
 }
