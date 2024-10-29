@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import ProgramacionIII.tpe.Tarea;
@@ -13,12 +14,12 @@ import ProgramacionIII.tpe.Tarea;
 
 
 public class CSVReader {
-	private LinkedList<Tarea> tareas;
+
 	public CSVReader() {
-		tareas = new LinkedList<Tarea>();
+
 	}
 	
-	public void readTasks(String taskPath) {
+	public void readTasks(String taskPath, HashMap<String,Tarea> contenedor) {
 		
 		// Obtengo una lista con las lineas del archivo
 		// lines.get(0) tiene la primer linea del archivo
@@ -32,7 +33,7 @@ public class CSVReader {
 			Integer tiempo = Integer.parseInt(line[2].trim());
 			Boolean critica = Boolean.parseBoolean(line[3].trim());
 			Integer prioridad = Integer.parseInt(line[4].trim());
-			this.tareas.addFirst(new Tarea(id,nombre,tiempo,critica,prioridad));
+			contenedor.put(id,new Tarea(id,nombre,tiempo,critica,prioridad));
 			
 		}
 		
@@ -83,8 +84,6 @@ public void readProcessors(String processorPath) {
 		return lines;
 	}
 
-	public LinkedList<Tarea> getTareas() {
-		return tareas;
-	}
+
 	
 }
