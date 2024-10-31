@@ -8,13 +8,14 @@ public class Procesador {
     private boolean esta_refrigerado;
     private Integer ano_funcionamiento;
     private LinkedList<Tarea> tareas;
-
+    private int cantidadTareasCriticas;
     public Procesador(String id_procesador,String codigo_procesador,boolean esta_refrigerado,Integer ano_funcionamiento) {
         this.id_procesador = id_procesador;
         this.codigo_procesador = codigo_procesador;
         this.esta_refrigerado = esta_refrigerado;
         this.ano_funcionamiento = ano_funcionamiento;
         this.tareas = new LinkedList<>();
+        this.cantidadTareasCriticas = 0;
     }
 
     public String getCodigo_procesador() {
@@ -34,10 +35,16 @@ public class Procesador {
     }
 
     public void agregarTarea(Tarea tarea){
+        if(tarea.isCritica()){
+            this.cantidadTareasCriticas ++;
+        }
         this.tareas.addFirst(tarea);
     }
 
     public void quitarTarea(Tarea tarea){
+        if(tarea.isCritica()){
+            this.cantidadTareasCriticas --;
+        }
         this.tareas.remove(tarea);
 
     }
@@ -48,6 +55,23 @@ public class Procesador {
         }
         return tiempoTotal;
     }
+    public void agregarTareas(LinkedList<Tarea>tareas){
+        this.tareas = tareas;
+    }
+    public LinkedList<Tarea> obtenerTareas(){
+        return this.tareas;
+    }
+    public int cantidadTareasCriticas(){
+       return this.cantidadTareasCriticas;
+    }
+    @Override
+    public String toString(){
+        String respuesta="Procesador: "+this.id_procesador+" Tareas: [";
+        for(Tarea t: this.tareas){
+            respuesta += t.toString();
+        }
+        return respuesta+="] Tiempo: "+this.obtenerTiempo();
 
+    }
 }
 

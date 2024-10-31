@@ -9,33 +9,49 @@ public class BackTacking {
     private LinkedList<Tarea> tareas;
     private Integer tiempoLimite;
     private LinkedList<Procesador> procesadores;
-    private Estado e;
+    private int contadorHijos;
 
     public BackTacking(HashMap<String, Tarea> tareas, LinkedList<Procesador> procesadores, Integer tiempoLimite) {
-
         this.procesadores = procesadores;
         this.tiempoLimite = tiempoLimite;
-        this.solucion = null;
+        this.solucion = new Solucion();
         this.tareas = this.tranformarEnLista(tareas);
-        this.e = new Estado(procesadores,this.tareas);
+        this.contadorHijos=0;
+    }
 
+    public Solucion asignarTareas() {
+        Estado e = new Estado(this.procesadores,this.tareas);
+        Solucion s = this.asignarTareas(e);
+        if(s.getTiempoDeProcesado()== null){
+            return null;
+        }else{
+            return s;
+        }
 
 
     }
-    public Solucion asignarTareas(){
+
+    private Solucion asignarTareas(Estado e){
+        this.contadorHijos ++;
         if(e.esEstadoFinal()){
-            if(e.getTiempo() < this.solucion.getTiempoDeProcesado()||this.solucion.getTiempoDeProcesado() ==null){
-                this.solucion.copiarEstado(this.e);
+            if(this.solucion.getTiempoDeProcesado() ==null ||e.getTiempo() < this.solucion.getTiempoDeProcesado()){
+                this.solucion = new Solucion();
+                this.solucion.copiarEstado(e,this.contadorHijos);
             }
         }else{
             Iterator<Procesador> itProcesador = e.getProcesadores();
 
             while (itProcesador.hasNext()){
                 Procesador procesadorActual = itProcesador.next();
-                Tarea tareaActual = this.e.obtenerTarea();
-                this.e.actualizar(procesadorActual,tareaActual);
-                asignarTareas();
-                this.e.deshacer(procesadorActual,tareaActual);
+                Tarea tareaActual = e.obtenerTarea();
+                e.actualizar(procesadorActual,tareaActual);
+                if(e.esFactible(this.tiempoLimite)){
+                    //realizar poda: si una tarea es asignada a un procesador y el tiempo de procesado de este exede el tiempo de la solucion
+                    //no asignarla
+                    asignarTareas(e);
+                }
+
+                e.deshacer(procesadorActual,tareaActual);
             }
         }
 
@@ -44,10 +60,6 @@ public class BackTacking {
     }
 
     private LinkedList<Tarea> tranformarEnLista(HashMap<String,Tarea> tareas){
-        LinkedList<Tarea> listaTareas = new LinkedList<>();
-        for (Tarea tarea : tareas.values()) {
-            listaTareas.add(tarea);
-        }
-        return listaTareas;
+        return new LinkedList<>(tareas.values());
     }
 }

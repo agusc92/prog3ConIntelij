@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import ProgramacionIII.tpe.Procesador;
 import ProgramacionIII.tpe.Tarea;
 
 
@@ -39,7 +40,7 @@ public class CSVReader {
 		
 	}
 	
-public void readProcessors(String processorPath) {
+public void readProcessors(String processorPath, LinkedList<Procesador>contenedor) {
 		
 		// Obtengo una lista con las lineas del archivo
 		// lines.get(0) tiene la primer linea del archivo
@@ -52,9 +53,10 @@ public void readProcessors(String processorPath) {
 			String codigo = line[1].trim();
 			Boolean refrigerado = Boolean.parseBoolean(line[2].trim());
 			Integer anio = Integer.parseInt(line[3].trim());
-			// Aca instanciar lo que necesiten en base a los datos leidos
+
+			contenedor.add(new Procesador(id,codigo,refrigerado,anio));
 		}
-		
+
 	}
 
 	private ArrayList<String[]> readContent(String path) {

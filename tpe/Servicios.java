@@ -20,12 +20,13 @@ public class Servicios {
 	private HashMap<String,Tarea> tareasMap;
 	private LinkedList<Tarea> critica;
 	private LinkedList<Tarea> noCritica;
-
+	private LinkedList<Procesador> procesadores;
 	public Servicios(String pathProcesadores, String pathTareas)
 	{
 		CSVReader reader = new CSVReader();
 		this.tareasMap = new HashMap<String,Tarea>();
-		reader.readProcessors(pathProcesadores);
+		this.procesadores = new LinkedList<>();
+		reader.readProcessors(pathProcesadores,this.procesadores);
 		reader.readTasks(pathTareas,this.tareasMap);
 		this.critica = new LinkedList<Tarea>();
 		this.noCritica = new LinkedList<Tarea>();
@@ -84,7 +85,10 @@ public class Servicios {
 		}
 		return tareaRango;
 	}
-	public void agignarTareasBack(){
-
+	public HashMap<String,Tarea> getTareas(){
+		return this.tareasMap;
+	}
+	public LinkedList<Procesador> getProcesadores(){
+		return this.procesadores;
 	}
 }

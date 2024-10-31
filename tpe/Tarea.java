@@ -38,6 +38,8 @@ public class Tarea {
 
 	@Override
 	public String toString(){
-		return this.nombre;
+		return "[id:"+this.id+" critica: "+this.critica + " tiempo: "+this.tiempo+"]";
+
 	}
+
 }
