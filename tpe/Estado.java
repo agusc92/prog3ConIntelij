@@ -1,7 +1,4 @@
 package ProgramacionIII.tpe;
-
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -25,7 +22,7 @@ public class Estado {
     }
 
     public Integer getTiempo(){
-
+        //se calcual y devuelve el tiempo mayor de procesado
         int tiempoMaximo = 0;
         for(Procesador procesador :this.procesadores){
             if(procesador.obtenerTiempo()>tiempoMaximo){
@@ -56,12 +53,14 @@ public class Estado {
     public boolean esFactible(Integer tiempoLimite){
         boolean factible = true;
         for(Procesador p : this.procesadores){
-            if(!p.isEsta_refrigerado()){
+            if(!p.isEsta_refrigerado()){//en caso de no ser refrijerado controla que no se exeda el tiempo limite
                 factible = p.obtenerTiempo()<tiempoLimite;
                 if(!factible) {
                     return factible;
                 }
             }
+            //en caso que la tarea sea critica se controla que el
+            //procesador no contenga 2 tareas griticas ya ingresadas
             factible = p.cantidadTareasCriticas() <= this.cantidadMaximaCriticas;
                 if(! factible){
                     return factible;

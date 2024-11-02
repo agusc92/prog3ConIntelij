@@ -1,102 +1,92 @@
 package ProgramacionIII.tpe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class Greedy {
 
-    private Solucion solucion;
-    private ArrayList<Tarea> candidatos;
-    private Integer tiempoLimite;
-    private ArrayList<Procesador> procesadores;
-    private int contadorHijos;
-    private boolean primera;
-    private boolean procesadorAvanza;
-    public Greedy(ArrayList<Tarea> tareas, ArrayList<Procesador> procesadores, Integer tiempoLimite) {
-        this.procesadores = procesadores;
-        this.tiempoLimite = tiempoLimite;
-        this.solucion = new Solucion();
-        this.contadorHijos=0;
-        this.primera = true;
-        this.procesadorAvanza = true;
-    }
-    public Solucion asignarTareas(){
-        Collections.sort(this.candidatos);
+        private SolucionGreedy solucion;
+        private LinkedList<Tarea> candidatos;
+        private Integer tiempoLimite;
+        private ArrayList<Procesador> procesadores;
+        private int contadorHijos;
+        public Greedy(LinkedList<Tarea> tareas, ArrayList<Procesador> procesadores, Integer tiempoLimite) {
+            this.procesadores = procesadores;
+            this.tiempoLimite = tiempoLimite;
+            this.solucion = new SolucionGreedy();
+            this.contadorHijos=0;
+            this.candidatos = tareas;
+        }
 
-        this.procesadores = this.ordenarProcesadores(this.procesadores);
-        int procesadorActual=0;
-        int intentos=0;
-        while (!this.candidatos.isEmpty()){
-            Procesador procesador=this.procesadores.get(procesadorActual);
-            Tarea t = this.candidatos.getFirst();
-            if(t!=null){
-                procesador.agregarTarea(t);
-                this.candidatos.remove(t);
-                intentos =0;
-            }else {
-                intentos ++;
+    public SolucionGreedy asignarTareas(){
+        Collections.sort(this.candidatos);//ordena las tareas de mayor a menor duracion.
+        int procesadorIndex = 0;//se utiliza para elegir a cual procesador acceder.
+        int intentos = 0;//se utiliza para saber si una tarea ya se intento meter en todos los procesadores.
+        int tareasAsignadas=0;//se utiliza para saber cuantas tareas fueron asignadas.
+        boolean invertida=false;//se utiliza para saber de que extemo de la lista se obtendra la tarea.
+        Tarea t = null;
+            while(intentos<this.procesadores.size()&&!this.candidatos.isEmpty()){
+                if(t==null){//verifica si la tarea elegida anteriormente pudo ser asignada
+                    if(invertida){
+                        t = this.candidatos.pop();
+
+                    }else{
+                        t = this.candidatos.poll();
+                    }
+                    this.solucion.aumentarCandidatos();
+                }
+
+                Procesador pActual = this.procesadores.get(procesadorIndex);
+
+                if (esFactible(pActual,t)){//verifica si la tarea seleccionada puede ser agregada al procesador actual.
+                    pActual.agregarTarea(t);
+                    intentos=0;//al asignar la tarea se reinicia el contador de intentos
+                    tareasAsignadas ++;
+                    t=null;//al ser asignada la tarea, se limpia la variable de tarea actual.
+                    if(tareasAsignadas==this.procesadores.size()){
+                        //al asignar una tarea en cada procesador, se cambia el extremo de la lista de donde
+                        //se obtienen las tareas (lo mas eficiente posible).
+                        invertida = !invertida;
+                        tareasAsignadas = 0;
+                    }
+                }else {
+                    intentos ++;
+                }
+                procesadorIndex ++;//se avanza al siguiente procesador.
+                if(procesadorIndex==this.procesadores.size()){
+                    //se reinicia la posicion del procesador actual para volver a asignar desde el principio.
+                    procesadorIndex=0;
+                }
             }
-
-
-            //se controla si agarramos el primer o ultimo procesador
-            if(this.procesadorAvanza){
-                procesadorActual ++;
-
-            }else {
-                procesadorActual --;
-            }
-            //cambia el valor de para saber si tiene que incrementar o decrementar el indice del procesador
-            if(procesadorActual==this.procesadores.size()){
-                this.procesadorAvanza = !this.procesadorAvanza;
-            }
-            //si da una vuelta completa por los procesadores y no se asigna la tarea, no hay solucon, puede que haya que cambiarla
-            //porque es del planteo anterior.
-            if(intentos==this.procesadores.size()){
+            if (intentos==this.procesadores.size()){
+                //si una tarea se intento agregar a todos los procesadores y no se logro, no hay solucion.
                 return null;
             }
+
+        for (Procesador p :this.procesadores){
+            solucion.agregarProcesador(p);
         }
+
         return this.solucion;
-
-    }
-
-
-    private ArrayList<Procesador> ordenarProcesadores(ArrayList<Procesador>procesadores){
-        ArrayList<Procesador> result = new ArrayList<>();
-        for (Procesador p : procesadores){
-            if(p.isEsta_refrigerado()){
-                result.addFirst(p);
-            }else {
-                result.addLast(p);
-            }
-        }
-        return result;
-    }
-
-    public Tarea seleccionar(Procesador p){
-        // while para seleccionar la primer tarea posible para este procesador
-        Tarea tareaActual=null;
-        Iterator<Tarea> tareas = this.candidatos.iterator();
-        boolean factible=false;
-        while(tareas.hasNext()&&!factible){
-            tareaActual = tareas.next();
-            factible = esFactible(p,tareaActual);
-
-        }
-        return tareaActual;
     }
     private boolean esFactible(Procesador p,Tarea t){
         //verifica que la tarea seleccionada pueda ser ingresada en el procesador actual
-        boolean factible = false;
+        boolean factible = true;
         if(!p.isEsta_refrigerado()){
-            factible = noSuperaTiempo(p,t);
+            factible = noSuperaTiempo(p,t);//en caso de no ser refrijerado controla que no se exeda el tiempo limite
         }
-         factible = (factible && noSuperaCriticas(p,t));
+        if(t.isCritica()){
+            factible = (factible && noSuperaCriticas(p));//en caso que la tarea sea critica se controla que el
+                                                        //procesador no contenga 2 tareas griticas ya ingresadas
+        }
+
         return factible;
     }
     private boolean noSuperaTiempo(Procesador p,Tarea t){
         return ((p.obtenerTiempo()+t.getTiempo()<this.tiempoLimite));
     }
-    private boolean noSuperaCriticas(Procesador p,Tarea t){
-        return(t.isCritica()&&p.cantidadTareasCriticas()>=2);
+    private boolean noSuperaCriticas(Procesador p){
+        return(p.cantidadTareasCriticas()<2);
     }
-
 }

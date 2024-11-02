@@ -2,11 +2,11 @@ package ProgramacionIII.tpe;
 
 import java.util.LinkedList;
 
-public class Solucion {
+public class SolucionBacktracking {
     private LinkedList<Procesador> procesadores;
     private Integer tiempoDeProcesado;
     private int cantidadHijos;
-    public Solucion() {
+    public SolucionBacktracking() {
         this.procesadores = new LinkedList<>();
         this.tiempoDeProcesado = 0;
         this.cantidadHijos=0;
@@ -14,6 +14,8 @@ public class Solucion {
     }
 
     public void copiarEstado(Estado e,int cantidadHijos){
+        //Obtenemos la solucion a partir de un estado, realizando una copia de los procesadores para no
+        //manipular el mismo objeto desde diferentes estructuras
         for(Procesador p :e.getListaProcesadores()){
             Procesador aux = new Procesador(p.getId_procesador(),p.getCodigo_procesador(),p.isEsta_refrigerado(),p.getAno_funcionamiento());
             aux.agregarTareas(new LinkedList<>(p.obtenerTareas()));
@@ -34,6 +36,8 @@ public class Solucion {
 
     @Override
     public String toString(){
+        //previamente definimos el metodo ToString en todos los elementos de la solucion y aqui realizamos
+        //El ensamblado del string que sera mostrado en el main.
         String respuesta="Backtracking: \n";
         respuesta += "Solucion obtenida: \n";
         for(Procesador p: this.procesadores){
