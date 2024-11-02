@@ -1,6 +1,6 @@
 package ProgramacionIII.tpe;
 
-public class Tarea {
+public class Tarea implements Comparable<Tarea> {
 	private String id;
 	private String nombre;
 	private Integer tiempo;
@@ -41,5 +41,9 @@ public class Tarea {
 		return "[id:"+this.id+" critica: "+this.critica + " tiempo: "+this.tiempo+"]";
 
 	}
-
+	@Override
+	//ordena de mayor a menor por tiempo
+	public int compareTo(Tarea t){
+		return Integer.compare(t.tiempo,this.tiempo);
+	}
 }

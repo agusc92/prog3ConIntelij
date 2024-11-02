@@ -8,8 +8,9 @@ public class Solucion {
     private int cantidadHijos;
     public Solucion() {
         this.procesadores = new LinkedList<>();
-        this.tiempoDeProcesado = null;
+        this.tiempoDeProcesado = 0;
         this.cantidadHijos=0;
+
     }
 
     public void copiarEstado(Estado e,int cantidadHijos){
@@ -23,12 +24,14 @@ public class Solucion {
     }
 
     public LinkedList<Procesador> getProcesadores() {
-        return procesadores;
+        return this.procesadores;
     }
 
     public Integer getTiempoDeProcesado() {
         return tiempoDeProcesado;
     }
+
+
     @Override
     public String toString(){
         String respuesta="Backtracking: \n";
@@ -37,7 +40,11 @@ public class Solucion {
             respuesta += (p.toString()+"\n");
 
         }
-        respuesta +="Tiempo maximo de procesado: "+this.tiempoDeProcesado;
+        respuesta +="Tiempo maximo de procesado: "+this.tiempoDeProcesado +"\n";
+
+            respuesta += "Cantidad de hijos generados: "+this.cantidadHijos;
+
+
         return respuesta;
 
     }

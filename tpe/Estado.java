@@ -20,10 +20,6 @@ public class Estado {
         return this.procesadores.iterator();
     }
 
-    public Tarea tareaNoAsignada(){
-        return null;
-    }
-
     public LinkedList<Procesador> getListaProcesadores(){
         return this.procesadores;
     }
