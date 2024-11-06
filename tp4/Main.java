@@ -10,6 +10,7 @@ public class Main {
 		// Creo un grafo dirigdo donde las etiquetas de los arcos son valores Float
 		GrafoDirigido<Float> grafito = new GrafoDirigido<>();
 		ServicioDfs dfs = new ServicioDfs(grafito);
+		ServicioBfs bfs = new ServicioBfs();
 		BuscadorCaminos gps = new BuscadorCaminos(grafito);
 		// Agrego los vertices 1 y 2
 		grafito.agregarVertice(2);
@@ -64,8 +65,9 @@ public class Main {
 //			System.out.println(lista.next());
 //		}
 
-		LinkedList<LinkedList<Integer>> todos = gps.todosLosCaminosHacia(6);
-		System.out.println(todos.size());
+		//LinkedList<LinkedList<Integer>> todos = gps.todosLosCaminosHacia(6);
+		//System.out.println(todos.size());
+		System.out.print(bfs.existeCaminoBfs(1,7,grafito));
 	}
 
 }

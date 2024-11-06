@@ -29,10 +29,11 @@ public class Greedy {
             while(intentos<this.procesadores.size()&&!this.candidatos.isEmpty()){
                 if(t==null){//verifica si la tarea elegida anteriormente pudo ser asignada
                     if(invertida){
-                        t = this.candidatos.pop();
-
+                        t= this.candidatos.getLast();
+                        this.candidatos.remove(t);
                     }else{
-                        t = this.candidatos.poll();
+                        t = this.candidatos.getFirst();
+                        this.candidatos.remove(t);
                     }
                     this.solucion.aumentarCandidatos();
                 }
